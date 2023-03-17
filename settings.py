@@ -1,8 +1,14 @@
-BOT_TOKEN = '5814274487:AAHZp8NjJj1EdGIKgRrj2XFm_CDqDFQkVLg'
+import os
+
+from dotenv import load_dotenv
+
+load_dotenv()
+
+BOT_TOKEN = os.getenv('BOT_TOKEN')
 
 
-HOST = '127.0.0.1'
-USER = 'postgres'
-PASSWORD = 'qwerty'
-DB_NAME = 'codeforces'
-PORT = 5432
+HOST = os.getenv('HOST')
+USER = os.getenv('USER')
+PASSWORD = os.getenv('PASSWORD')
+DB_NAME = os.getenv('DB_NAME')
+PORT = os.getenv('PORT')
