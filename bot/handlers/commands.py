@@ -1,4 +1,5 @@
 from aiogram.types import Message, CallbackQuery
+from aiogram.dispatcher.filters import Command
 from aiogram.dispatcher import FSMContext
 
 from loader import dp, db
@@ -7,8 +8,12 @@ from keyboards.inline.keyboard import (ikb_complexity, complexity_list,
 from states.get_records import GetRecords
 
 
-@dp.message_handler(text='/start')
-async def start(message: Message):
+@dp.message_handler(Command('start'), state='*')
+async def start(message: Message, state: FSMContext):
+    current_state = await state.get_state()
+    if current_state:
+        await state.finish()
+    
     await message.answer(
         'Здравствуйте, выберите тему',
         reply_markup=ikb_themes
@@ -16,14 +21,14 @@ async def start(message: Message):
     await GetRecords.theme.set()
 
 
-@dp.callback_query_handler(text='Выбрать новые задачи', state="*")
+@dp.callback_query_handler(text='Выбрать новые задачи', state='*')
 async def select_new_tasks(call: CallbackQuery, state: FSMContext):
     current_state = await state.get_state()
     if current_state:
         await state.finish()
 
     await call.message.answer(
-        'Здравствуйте, выберите тему',
+        'Выберите тему',
         reply_markup=ikb_themes
     )
     await GetRecords.theme.set()
